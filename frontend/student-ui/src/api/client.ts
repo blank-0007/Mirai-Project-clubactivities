@@ -33,7 +33,10 @@ async function send(method: string, path: string, body?: unknown): Promise<Respo
   }
   let res: Response;
   try {
-    res = await fetch(API_BASE_URL + path, { method, headers, body: payload });
+    const targetUrl = API_BASE_URL.startsWith("http")
+    ? new URL(path.replace(/^\//, ""), API_BASE_URL + "/").toString()
+    : `${API_BASE_URL}${path.startsWith("/") ? path : "/" + path}`;
+  res = await fetch(targetUrl, { method, headers, body: payload });
   } catch {
     throw new ApiError(`Cannot reach the server at ${API_BASE_URL}. Check your connection and try again.`, 0);
   }
