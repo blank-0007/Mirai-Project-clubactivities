@@ -16,6 +16,19 @@
           "env": "BACKEND_URL"
         }
       ]
+    },
+    "portals": {
+      "root": ".",
+      "buildCommand": "node scripts/build-all-portals.mjs",
+      "outputDirectory": "dist-portals",
+      "bindings": [
+        {
+          "type": "service",
+          "service": "backend",
+          "format": "url",
+          "env": "BACKEND_URL"
+        }
+      ]
     }
   },
   "rewrites": [
@@ -27,9 +40,23 @@
       }
     },
     {
+      "source": "/student-ui/:path*",
+      "destination": {
+        "service": "student-ui",
+        "path": "/:path*"
+      }
+    },
+    {
+      "source": "/student-ui",
+      "destination": {
+        "service": "student-ui",
+        "path": "/"
+      }
+    },
+    {
       "source": "/(.*)",
       "destination": {
-        "service": "student-ui"
+        "service": "portals"
       }
     }
   ]
